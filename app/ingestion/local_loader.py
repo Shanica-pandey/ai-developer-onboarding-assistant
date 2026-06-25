@@ -1,6 +1,6 @@
 from pathlib import Path
+from langchain_core.documents import Document
 
-# Folders we don't want to scan
 EXCLUDED_DIRS = {
     ".git",
     "__pycache__",
@@ -9,7 +9,6 @@ EXCLUDED_DIRS = {
     "venv",
 }
 
-# File extensions we'll read for now
 SUPPORTED_EXTENSIONS = {
     ".py",
     ".md",
@@ -21,14 +20,6 @@ SUPPORTED_EXTENSIONS = {
 
 
 def load_project(project_path: str):
-    """
-    Reads supported text files from a project directory.
-
-    Returns:
-        A list of dictionaries with:
-        - path: relative file path
-        - content: file contents
-    """
     root = Path(project_path)
 
     if not root.exists():
@@ -40,7 +31,6 @@ def load_project(project_path: str):
         if not file_path.is_file():
             continue
 
-        # Skip excluded directories
         if any(part in EXCLUDED_DIRS for part in file_path.parts):
             continue
 
@@ -50,14 +40,15 @@ def load_project(project_path: str):
         try:
             content = file_path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
-            # Skip files that aren't valid UTF-8 text
             continue
 
         documents.append(
-            {
-                "path": str(file_path.relative_to(root)),
-                "content": content,
-            }
+            Document(
+                page_content=content,
+                metadata={
+                    "source": str(file_path.relative_to(root))
+                },
+            )
         )
 
     return documents

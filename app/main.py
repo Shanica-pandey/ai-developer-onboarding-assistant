@@ -1,15 +1,20 @@
 from ingestion.local_loader import load_project
+from indexing.chunker import split_documents
 
 
 def main():
-    project_to_read = "."
+    documents = load_project(".")
 
-    documents = load_project(project_to_read)
+    chunks = split_documents(documents)
 
-    print(f"Loaded {len(documents)} files.\n")
+    print(f"Loaded {len(documents)} files.")
+    print(f"Created {len(chunks)} chunks.\n")
 
-    for doc in documents[:5]:
-        print(f"- {doc['path']}")
+    for chunk in chunks[:3]:
+        print("=" * 60)
+        print(chunk.metadata)
+        print(chunk.page_content[:250])
+        print()
 
 
 if __name__ == "__main__":
