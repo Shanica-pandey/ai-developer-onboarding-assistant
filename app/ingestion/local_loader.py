@@ -7,6 +7,7 @@ EXCLUDED_DIRS = {
     "node_modules",
     ".venv",
     "venv",
+    "chroma_db",
 }
 
 SUPPORTED_EXTENSIONS = {

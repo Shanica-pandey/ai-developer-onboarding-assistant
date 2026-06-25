@@ -1,6 +1,5 @@
 langchain
 langchain-community
-langchain-openai
+langchain-google-genai
 chromadb
 python-dotenv
-tiktoken
